@@ -1,0 +1,15 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: student-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/StudentServiceDB
+    username: postgres
+    password: Ashu@Golu1
+
+  jpa:
+    hibernate:
+      ddl-auto: update
