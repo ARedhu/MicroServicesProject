@@ -1,26 +1,36 @@
 package com.Ashish.student_service.service;
 
+import com.Ashish.student_service.client.CourseClient;
 import com.Ashish.student_service.dto.CourseDto;
 import com.Ashish.student_service.dto.StudentDto;
 import com.Ashish.student_service.dto.StudentReqDto;
 import com.Ashish.student_service.entity.StudentEntity;
 import com.Ashish.student_service.repository.StudentRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+//import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class StudentService {
 
     private final StudentRepository studentRepository;
     private final ModelMapper modelMapper;
+    private final RestClient restClient;
+    private final CourseClient courseClient;
+
+    public StudentService(StudentRepository studentRepository, ModelMapper modelMapper, @Qualifier("loadBalancedRestClientBuilder") RestClient.Builder restClientBuilder, CourseClient courseClient) {
+        this.studentRepository = studentRepository;
+        this.modelMapper = modelMapper;
+        this.restClient = restClientBuilder.build();
+        this.courseClient = courseClient;
+    }
 
     public StudentDto createANewStudent(StudentReqDto studentReqDto) {
         StudentEntity studentEntity = studentRepository.findByEmail(studentReqDto.getEmail());
@@ -93,14 +103,20 @@ public class StudentService {
     public List<CourseDto> getAllCourses() {
         // But in springboot versions 3. or later we can use RestClient.
 
-        String url = "http://localhost:8082/courses";
+//        String url = "http://localhost:8082/courses";
+//
+//        RestClient restClient = RestClient.create();
 
-        RestClient restClient = RestClient.create();
+        String url = "http://course-service/courses";
         return restClient
                     .get()
                     .uri(url)
                     .retrieve()
                     .body(new ParameterizedTypeReference<List<CourseDto>>() {});
 
+    }
+
+    public CourseDto getAParticularCourse(Long id) {
+        return courseClient.getCourse(id);
     }
 }

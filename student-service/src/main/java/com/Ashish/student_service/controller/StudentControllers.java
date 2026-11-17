@@ -47,4 +47,9 @@ public class StudentControllers {
         return ResponseEntity.ok(studentService.getAllCourses());
     }
 
+    @GetMapping("/getAParticularCourse/{id}")
+    private ResponseEntity<CourseDto> getAParticularCourse(@PathVariable Long id){
+        return ResponseEntity.ok(studentService.getAParticularCourse(id));
+    }
+
 }
