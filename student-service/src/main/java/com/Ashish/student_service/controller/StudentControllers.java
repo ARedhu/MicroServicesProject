@@ -1,5 +1,6 @@
 package com.Ashish.student_service.controller;
 
+import com.Ashish.student_service.dto.CourseDto;
 import com.Ashish.student_service.dto.StudentDto;
 import com.Ashish.student_service.dto.StudentReqDto;
 import com.Ashish.student_service.service.StudentService;
@@ -39,6 +40,11 @@ public class StudentControllers {
     @DeleteMapping("/{id}")
     private boolean deleteStudent(@PathVariable Long id){
         return studentService.deleteStudent(id);
+    }
+
+    @GetMapping("/getCourses")
+    private ResponseEntity<List<CourseDto>> getAllCourses(){
+        return ResponseEntity.ok(studentService.getAllCourses());
     }
 
 }
