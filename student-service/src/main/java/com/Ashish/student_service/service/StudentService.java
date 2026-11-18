@@ -6,6 +6,9 @@ import com.Ashish.student_service.dto.StudentDto;
 import com.Ashish.student_service.dto.StudentReqDto;
 import com.Ashish.student_service.entity.StudentEntity;
 import com.Ashish.student_service.repository.StudentRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -116,6 +119,9 @@ public class StudentService {
 
     }
 
+    @Retry(name = "courseService")
+    @CircuitBreaker(name = "courseService")
+    @RateLimiter(name = "courseService")
     public CourseDto getAParticularCourse(Long id) {
         return courseClient.getCourse(id);
     }
