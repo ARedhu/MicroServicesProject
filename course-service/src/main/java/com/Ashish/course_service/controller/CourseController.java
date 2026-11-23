@@ -39,4 +39,9 @@ public class CourseController {
     public boolean deleteCourse(@PathVariable Long id) {
         return courseService.deleteCourseById(id);
     }
+
+    @GetMapping("/hello")
+    public String hello(@RequestHeader("X-User-Id") Long userid){
+        return "Hello from userId : " + userid;
+    }
 }
