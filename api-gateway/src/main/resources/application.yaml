@@ -14,6 +14,8 @@ spring:
               uri: lb://student-service # lb -> means load balancer. So, that we can use the application name rather than the IP address.
               predicates:
                 - Path=/students/** # predicate defines the urls/paths which will be taken care by this service.
+              filters:
+                - name: StudentLoggingFilter
             - id: course-service
               uri: lb://course-service # "course-service", the application name must same as registered in eureka server.
               predicates:

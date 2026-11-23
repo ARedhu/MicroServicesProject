@@ -69,4 +69,4 @@ resilience4j:
 
 
 # Internal service rate limiting, we have used here for service to service communication rate limiting.
-# External API rate limiting. For this we need a shared store if we have multiple instances of API Gateway. So, we have to use Redis as well. This we can do later. 
+# External API rate limiting. For this we need a shared store if we have multiple instances of API Gateway. So, we have to use Redis as well. This we can do later.
