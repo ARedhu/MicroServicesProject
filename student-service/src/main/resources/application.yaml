@@ -1,61 +1,73 @@
-server:
-  port: 8081
+#server:
+#  port: 8081
 
 spring:
   application:
     name: student-service
+  config:
+    import:
+      - "configserver:http://localhost:8888"
+  profiles:
+    active: dev
 
-# only when we have sync funtions.
-# Timeouts (connectTimeout, readTimeout, timeoutDuration) only apply when a server is running and accepts a connection, but takes too long to reply.
-  cloud:
-    openfeign:
-      client:
-        config:
-          course-service: # Remember this name should be same as the service name registered in Eureka server.
-            connectTimeout: 5000
-            readTimeout: 5000 # usually all these things kept very small.
-  datasource:
-    url: jdbc:postgresql://localhost:5432/StudentServiceDB
-    username: postgres
-    password: Ashu@Golu1
-  jpa:
-    hibernate:
-      ddl-auto: update
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, info, env
 
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
-
-# for async functions.
-resilience4j:
-  timelimiter:
-    instances:
-      course-service:
-        timeoutDuration: 30s
-
-  retry:
-    instances:
-      courseService: # This is the Resilience4j retry configuration instance name. We can name it anything. It is not specific to a particular application-name registered in Eureka.
-        maxAttempts: 3
-        waitDuration: 1s # It is the pause between a failed attempt and the next retry.
-
-  circuitbreaker:
-    instances:
-      courseService:
-        slidingWindowSize: 10 # Circuit Breaker looks at the latest 10 calls to make a decision either to keep the circuit open or close it.
-        failureRateThreshold: 50 # If failures reach 50% or more, Circuit Breaker opens. It is in percentage.
-        waitDurationInOpenState: 10s
-        permittedNumberOfCallsInHalfOpenState: 3
-
-  ratelimiter:
-    instances:
-      courseService:
-        limitForPeriod: 5 # 5 requests allowed in one period.
-        limitRefreshPeriod: 1s # One period will refresh after 1 sec. Means 5-req allowed in 1s.
-        timeoutDuration: 0 # means do not wait for permissions. If the limit has been reached, reject immediately.
+#
+## only when we have sync funtions.
+## Timeouts (connectTimeout, readTimeout, timeoutDuration) only apply when a server is running and accepts a connection, but takes too long to reply.
+#  cloud:
+#    openfeign:
+#      client:
+#        config:
+#          course-service: # Remember this name should be same as the service name registered in Eureka server.
+#            connectTimeout: 5000
+#            readTimeout: 5000 # usually all these things kept very small.
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/StudentServiceDB
+#    username: postgres
+#    password: Ashu@Golu1
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+#
+## for async functions.
+#resilience4j:
+#  timelimiter:
+#    instances:
+#      course-service:
+#        timeoutDuration: 30s
+#
+#  retry:
+#    instances:
+#      courseService: # This is the Resilience4j retry configuration instance name. We can name it anything. It is not specific to a particular application-name registered in Eureka.
+#        maxAttempts: 3
+#        waitDuration: 1s # It is the pause between a failed attempt and the next retry.
+#
+#  circuitbreaker:
+#    instances:
+#      courseService:
+#        slidingWindowSize: 10 # Circuit Breaker looks at the latest 10 calls to make a decision either to keep the circuit open or close it.
+#        failureRateThreshold: 50 # If failures reach 50% or more, Circuit Breaker opens. It is in percentage.
+#        waitDurationInOpenState: 10s
+#        permittedNumberOfCallsInHalfOpenState: 3
+#
+#  ratelimiter:
+#    instances:
+#      courseService:
+#        limitForPeriod: 5 # 5 requests allowed in one period.
+#        limitRefreshPeriod: 1s # One period will refresh after 1 sec. Means 5-req allowed in 1s.
+#        timeoutDuration: 0 # means do not wait for permissions. If the limit has been reached, reject immediately.
 
 # How the things will work here: timeout + retry.
 # As we have set the timeout as well as the retry. So, both of them combine and our overall response time increases.

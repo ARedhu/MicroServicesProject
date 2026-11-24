@@ -1,40 +1,43 @@
-server:
-  port: 8080
+#server:
+#  port: 8080
 
 spring:
   application:
     name: api-gateway
-
   config:
-    import: optional:file:api-gateway/.env[.properties]
+    import:
+      - "configserver:http://localhost:8888"
 
-  cloud:
-    gateway:
-      server:
-        webflux:
-          routes:
-            - id: student-service # this is the unique identifier but it is not necessary to keep it same as application name. But keep it same.
-              uri: lb://student-service # lb -> means load balancer. So, that we can use the application name rather than the IP address.
-              predicates:
-                - Path=/students/** # predicate defines the urls/paths which will be taken care by this service.
-              filters:
-                - name: StudentLoggingFilter
-            - id: course-service
-              uri: lb://course-service # "course-service", the application name must same as registered in eureka server.
-              predicates:
-                - Path=/courses/**
-              filters:
-                - name: Authentication
-                  args:
-                    enabled: true
-
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
-
-
-jwt:
-  secretKey: ${JWT_SECRET}
+#  config:
+#    import: optional:file:api-gateway/.env[.properties]
+#
+#  cloud:
+#    gateway:
+#      server:
+#        webflux:
+#          routes:
+#            - id: student-service # this is the unique identifier but it is not necessary to keep it same as application name. But keep it same.
+#              uri: lb://student-service # lb -> means load balancer. So, that we can use the application name rather than the IP address.
+#              predicates:
+#                - Path=/students/** # predicate defines the urls/paths which will be taken care by this service.
+#              filters:
+#                - name: StudentLoggingFilter
+#            - id: course-service
+#              uri: lb://course-service # "course-service", the application name must same as registered in eureka server.
+#              predicates:
+#                - Path=/courses/**
+#              filters:
+#                - name: Authentication
+#                  args:
+#                    enabled: true
+#
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+#
+#
+#jwt:
+#  secretKey: ${JWT_SECRET}

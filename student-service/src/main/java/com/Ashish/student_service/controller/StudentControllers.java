@@ -1,10 +1,13 @@
 package com.Ashish.student_service.controller;
 
+import com.Ashish.student_service.config.StudentConfig;
 import com.Ashish.student_service.dto.CourseDto;
 import com.Ashish.student_service.dto.StudentDto;
 import com.Ashish.student_service.dto.StudentReqDto;
 import com.Ashish.student_service.service.StudentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +20,7 @@ import java.util.List;
 public class StudentControllers {
 
     private final StudentService studentService;
+    private final StudentConfig studentConfig;
 
     @PostMapping
     private ResponseEntity<StudentDto> createStudent(@RequestBody StudentReqDto studentReqDto){
@@ -50,6 +54,11 @@ public class StudentControllers {
     @GetMapping("/getAParticularCourse/{id}")
     private ResponseEntity<CourseDto> getAParticularCourse(@PathVariable Long id){
         return ResponseEntity.ok(studentService.getAParticularCourse(id));
+    }
+
+    @GetMapping("/helloStudent")
+    private String helloStudent(){
+        return "Hello from student: "+studentConfig.getHelloVariable();
     }
 
 }

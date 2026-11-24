@@ -74,6 +74,12 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Dependency for Config client -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
