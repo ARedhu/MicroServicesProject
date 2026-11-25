@@ -8,13 +8,8 @@ spring:
     import:
       - "configserver:http://localhost:8888"
   profiles:
-    active: dev
+    active: default
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh, health, info, env
 
 #
 ## only when we have sync funtions.
@@ -82,3 +77,5 @@ management:
 
 # Internal service rate limiting, we have used here for service to service communication rate limiting.
 # External API rate limiting. For this we need a shared store if we have multiple instances of API Gateway. So, we have to use Redis as well. This we can do later.
+
+

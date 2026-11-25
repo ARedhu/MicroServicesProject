@@ -26,7 +26,7 @@ public class CourseController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CourseDto> getCourseById(@PathVariable Long id) throws InterruptedException {
-        Thread.sleep(70000);
+//        Thread.sleep(70000);
         return ResponseEntity.ok(courseService.getCourseById(id));
     }
 
